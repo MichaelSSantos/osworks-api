@@ -1,0 +1,1 @@
+alter table cliente change telefone phone varchar(20);
