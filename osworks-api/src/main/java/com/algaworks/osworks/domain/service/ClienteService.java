@@ -15,10 +15,12 @@ public class ClienteService {
 
 	public Cliente salvar(Cliente cliente) {
 		Cliente clienteExistente = clienteRepository.findByEmail(cliente.getEmail());
-		/* Se o retorno for diferente de null, então o e-mail já existe. 
-		 * Se o cliente retornado for igual ao que está sendo enviado para salvar, então trata-se de uma atualização.
-		 * Se o cliente retornado for diferente do que está sendo enviado para salvar, então há uma tentativa de salvar 
-		 * um e-mail já usado por outro cliente.
+		/* Se o cliente retornado for diferente de null e  
+		 * Se o cliente retornado for diferente do que está sendo enviado para salvar, 
+		 * então há uma tentativa de salvar um e-mail já usado por outro cliente.
+		 * 
+		 * Se o cliente retornado for diferente de null, mas 
+		 * o cliente retornado for igual ao que está sendo enviado para salvar, então trata-se de uma atualização.
 		 * */
 		if (clienteExistente != null && !clienteExistente.equals(cliente)) {
 			throw new NegocioException("E-mail já cadastrado.");
