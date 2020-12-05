@@ -1,6 +1,6 @@
 package com.algaworks.osworks.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +39,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		List<Campo> campos = new ArrayList<ExceptionObject.Campo>();
-
-		ex.getBindingResult().getAllErrors().forEach(error -> {
+ 
+		ex.getBindingResult().getAllErrors().forEach(error -> {  
 			String nome = ((FieldError) error).getField();
 			String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
 			campos.add(new Campo(nome, mensagem));
 		});
 
-		ExceptionObject erro = new ExceptionObject(status.value(), LocalDateTime.now(), "Erro de validação", campos);
+		ExceptionObject erro = new ExceptionObject(status.value(), OffsetDateTime.now(), "Erro de validação", campos);
 
 		return super.handleExceptionInternal(ex, erro, headers, status, request);
 	}
@@ -54,7 +54,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<?> handleDomainExpection(NegocioException ex, WebRequest request){
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ExceptionObject erro = new ExceptionObject(status.value(), LocalDateTime.now(), ex.getMessage(), null);
+		ExceptionObject erro = new ExceptionObject(status.value(), OffsetDateTime.now(), ex.getMessage(), null);
 		return super.handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
 	}
 
