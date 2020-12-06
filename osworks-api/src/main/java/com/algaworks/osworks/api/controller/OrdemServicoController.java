@@ -25,6 +25,16 @@ import com.algaworks.osworks.domain.model.OrdemServico;
 import com.algaworks.osworks.domain.repository.OrdemServicoRepository;
 import com.algaworks.osworks.domain.service.GestaoOrdemServicoService;
 
+/**
+ * @CrossOrigin: Suporte para origens cruzadas do Spring. Ler client.js no projeto consumer.
+ * @CrossOrigin(origins = "http://localhost:8082"): Especifica quais origens são permitidas na política de CORS.
+ * @CrossOrigin(maxAge = 20):Tempo máximo que o browser pode armazenar o cache do preflight. Default: 30 minutos.
+ * 	Foi definido 20 segundos. Evita uma requisição do tipo OPTIONS e depois a requisição para obter os dados. 
+ *  O Preflight ocorre apenas em requisições que não são consideradas simples: 
+ *  https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests
+ *  
+ */
+//@CrossOrigin
 @RestController
 @RequestMapping("/ordens-servico")
 public class OrdemServicoController {
