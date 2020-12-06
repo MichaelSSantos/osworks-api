@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.algaworks.osworks.api.exceptionhandler.ExceptionObject.Campo;
+import com.algaworks.osworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.osworks.domain.exception.NegocioException;
 
 /**
@@ -46,16 +47,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			campos.add(new Campo(nome, mensagem));
 		});
 
-		ExceptionObject erro = new ExceptionObject(status.value(), OffsetDateTime.now(), "Erro de validação", campos);
+		ExceptionObject erro = buildExceptionObject("Erro de validação", status, campos);
 
 		return super.handleExceptionInternal(ex, erro, headers, status, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> handleDomainExpection(NegocioException ex, WebRequest request){
+	public ResponseEntity<?> handleNegocioExpection(NegocioException ex, WebRequest request){
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ExceptionObject erro = new ExceptionObject(status.value(), OffsetDateTime.now(), ex.getMessage(), null);
+		ExceptionObject erro = buildExceptionObject(ex.getMessage(), status, null);
 		return super.handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
 	}
 
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<?> handleEntidadeNaoEncontradaExpection(NegocioException ex, WebRequest request){
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ExceptionObject erro = buildExceptionObject(ex.getMessage(), status, null);
+		return super.handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
+	}
+	
+	private ExceptionObject buildExceptionObject(String mensagem, HttpStatus status, List<Campo> campos) {
+		ExceptionObject erro = new ExceptionObject(status.value(), OffsetDateTime.now(), mensagem, campos);
+		return erro;
+	}
 }

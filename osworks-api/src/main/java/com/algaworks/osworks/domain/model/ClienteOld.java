@@ -7,27 +7,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.algaworks.osworks.domain.ValidationGroups;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Toda a validação está sendo realizada pelo representation model, logo não
- * torna-se mais necessária as anotações no modelo de domínio. Ver
- * ClienteOld.java
- * 
- * Nesse curso foram apenas criadas classes DTO para OrdemServico, logo as
- * anotações de validação foram mantidas em cliente, exceto em id, que é utiliza
- * apenas em OrdemServico. Ver clienteOld.java
+ * A estrutura do BD foi criada via Flyway. 
+ * Foi utilizado o Jakarta Persistence para fazer o mapeamento objeto-relacional.
  */
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-public class Cliente {
+public class ClienteOld {
 	
+	/* NotNull em Id:
+	 * id de cliente não pode ser nulo quando uma ordem de serviço for salva. Ver OrdemService.java
+	 * Na validação de cliente, o grupo padrão é o Default.class que valida tudo, 
+	 * mas está sendo especificado que o id será validado somente quando for utilizado o grupo 
+	 * ValidationGroups.ClienteId.class, que ocorre no cascateamento da validação por OrdemServico.java
+	 * */
+	@NotNull(groups = ValidationGroups.ClienteId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
