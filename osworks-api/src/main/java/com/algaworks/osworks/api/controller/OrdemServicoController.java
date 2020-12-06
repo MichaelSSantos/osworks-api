@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.osworks.api.model.OrdemServicoModel;
 import com.algaworks.osworks.domain.model.OrdemServico;
 import com.algaworks.osworks.domain.repository.OrdemServicoRepository;
 import com.algaworks.osworks.domain.service.GestaoOrdemServicoService;
@@ -41,6 +42,10 @@ public class OrdemServicoController {
 		return ordemServicoRepository.findAll();
 	}
 	
+	/**
+	 * Ao invés de retornar o Domain Model que é OrdemServico, 
+	 * será retornado o Represantation Model que é o OrdemServicoModel
+	 */
 	@GetMapping("/{ordemServicoId}")
 	public ResponseEntity<OrdemServico> buscar(@PathVariable Long ordemServicoId){
 		Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemServicoId);
